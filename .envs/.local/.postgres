@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=esnpolimi_mgmt
+POSTGRES_USER=UwfpzrybhADTvKKiNmUyuqSerOVZAcLU
+POSTGRES_PASSWORD=t2DaXFYoz2MB0c59G9KLh5wDHHXHzUg0DSRE7l34DsW2MoRklSkmhEjNSELD4aVm
