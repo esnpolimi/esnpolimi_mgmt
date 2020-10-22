@@ -18,6 +18,7 @@ services:
       - .:/app:z
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.django_vhost
       - ./.envs/.local/.postgres
     ports:
       - "8000:8000"
@@ -55,3 +56,16 @@ services:
     container_name: mailhog
     ports:
       - "8025:8025"
+
+  nginx-proxy:
+    image: "jwilder/nginx-proxy:alpine"
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+    restart: always
+    depends_on:
+      - django
