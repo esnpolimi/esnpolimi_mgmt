@@ -75,7 +75,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "esnpolimi_mgmt.users.apps.UsersConfig",
-    # Your stuff: custom apps go here
+    "esnpolimi_mgmt.apps.EsnPolimiMgmtConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
