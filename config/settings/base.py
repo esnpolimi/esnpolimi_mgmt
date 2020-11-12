@@ -4,6 +4,7 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
+from moneyed import EUR
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # esnpolimi_mgmt/
@@ -71,6 +72,10 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    "simple_history",
+    "phonenumber_field",
+    "django_countries",
+    "djmoney",
 ]
 
 LOCAL_APPS = [
@@ -134,6 +139,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 # STATIC
@@ -287,3 +293,12 @@ REST_FRAMEWORK = {
 CORS_URLS_REGEX = r"^/api/.*$"
 # Your stuff...
 # ------------------------------------------------------------------------------
+# Univeristy Related
+HOME_UNIVERSITY = "Politecnico di Milano"
+HOME_SECTION = "ESN Politecnico Milano"
+
+# Django Money
+DEFAULT_CURRENCY = EUR
+CURRENCIES = ("EUR",)
+CURRENCY_DECIMAL_PLACES = 2
+MAX_CURRENCY_DIGITS = 12
