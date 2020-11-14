@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from django_currentuser.db.models import CurrentUserField
 from django_extensions.db.fields import RandomCharField
+from django_fsm import FSMField, transition
 from djmoney.models.fields import MoneyField
 from phonenumber_field.modelfields import PhoneNumberField
 from simple_history.models import HistoricalRecords
@@ -90,7 +91,29 @@ class Event(models.Model):
     fee = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, blank=True, default=0)
     deposit = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, blank=True, default=0)
 
-    # status = FSM ready done cancelled
+    class Status(models.TextChoices):
+        ready = "ready", _("Ready")
+        done = "done", _("Done")
+        cancelled = "cancelled", _("Cancelled")
+
+    status = FSMField(choices=Status.choices, default=Status.ready)
+
+    def is_open_at(self, time):
+        return self.signup_open <= time < self.signup_close
+
+    @property
+    def is_open(self):
+        return self.is_open_at(datetime.date.today())
+
+    @transition(field=status, source=Status.ready, target=Status.done)
+    def confirm(self):
+        """Cannot refund anymore."""
+        pass
+
+    @transition(field=status, source=Status.ready, target=Status.cancelled)
+    def cancel(self):
+        """Start refund of all partecipants (not referents)."""
+        pass
 
 
 class MainList(models.Model):

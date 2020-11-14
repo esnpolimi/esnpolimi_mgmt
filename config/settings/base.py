@@ -76,6 +76,8 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "django_countries",
     "djmoney",
+    "django_fsm",
+    "fsm_admin",
 ]
 
 LOCAL_APPS = [
