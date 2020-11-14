@@ -1,11 +1,11 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
+from django_currentuser.db.models import CurrentUserField
 from django_extensions.db.fields import RandomCharField
 from djmoney.models.fields import MoneyField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -72,7 +72,7 @@ class ESNcard(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
-    created_by = models.ForeignKey(get_user_model(), models.SET_NULL, null=True)
+    created_by = CurrentUserField(on_delete=models.SET_NULL)
 
     start_date = models.DateField()
     end_date = models.DateField()
