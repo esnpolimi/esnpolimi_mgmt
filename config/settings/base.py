@@ -305,3 +305,6 @@ DEFAULT_CURRENCY = EUR
 CURRENCIES = ("EUR",)
 CURRENCY_DECIMAL_PLACES = 2
 MAX_CURRENCY_DIGITS = 12
+
+# Fix django extensioon
+SHELL_PLUS_DONT_LOAD = ["esnpolimi_mgmt.HistoricalAccount"]
