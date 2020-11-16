@@ -53,4 +53,4 @@ class User(AbstractUser):
         return reverse("users:detail", kwargs={"username": self.username})
 
     def name(self):
-        return f"{self.first_name} {self.surname}"
+        return f"{self.first_name} {self.last_name}"
