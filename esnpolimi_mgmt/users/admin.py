@@ -13,9 +13,8 @@ class UserAdmin(FSMTransitionMixin, auth_admin.UserAdmin):
 
     form = UserChangeForm
     add_form = UserCreationForm
-    fieldsets = (("User", {"fields": ("name",)}),) + tuple(
-        auth_admin.UserAdmin.fieldsets
-    )
-    list_display = ["username", "name", "is_superuser"]
-    search_fields = ["name"]
+    list_display = ["username", "name", "is_active", "is_staff", "is_superuser"]
     fsm_field = ["status"]
+
+    def name(self, obj):
+        return obj.person.name
