@@ -27,4 +27,6 @@ django-simple-history
 django-phonenumber-field[phonenumbers]
 django-currentuser
 django-fsm
+
+# Admin
 django-fsm-admin

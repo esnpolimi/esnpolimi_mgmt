@@ -34,6 +34,9 @@ class Person(models.Model):
     creation_time = models.DateTimeField(default=timezone.now)
     last_modified = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Student(models.Model):
     matricola = models.PositiveIntegerField()
