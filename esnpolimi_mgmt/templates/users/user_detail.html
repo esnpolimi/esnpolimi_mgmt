@@ -9,22 +9,43 @@
   <div class="row">
     <div class="col-sm-12">
 
+      {% if object.person %}
+      <h2>{{ object.person.name }}</h2>
+      <h3>AKA {{ object.username }}</h3>
+      {% else %}
       <h2>{{ object.username }}</h2>
-      {% if object.name %}
-        <p>{{ object.name }}</p>
       {% endif %}
     </div>
   </div>
 
 {% if object == request.user %}
 <!-- Action buttons -->
-<div class="row">
+<div class="card-deck">
 
-  <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <!-- Your Stuff: Custom user template urls -->
+  <div class="card border-0">
+    <a class="btn btn-outline-primary" href="{% url 'users:update' %}" role="button">
+        Change Username
+    </a>
   </div>
+
+  <div class="card border-0">
+    <a class="btn btn-outline-primary" href="{% url 'account_email' %}" role="button">
+        Change E-Mail
+    </a>
+  </div>
+
+  <div class="card border-0">
+    <a class="btn btn-outline-primary" href="{% url 'account_set_password' %}" role="button">
+        Change Password
+    </a>
+  </div>
+
+  <div class="card border-0">
+    <a class="btn btn-outline-primary" href="{% url 'socialaccount_connections' %}" role="button">
+        Connected Accounts
+    </a>
+  </div>
+    <!-- Your Stuff: Custom user template urls -->
 
 </div>
 <!-- End Action buttons -->
