@@ -53,7 +53,9 @@ if env("USE_DOCKER") == "yes":
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
+    INTERNAL_IPS += [
+        ".".join(ip.split(".")[:-1] + [str(i)]) for ip in ips for i in range(10)
+    ]
 
 # django-extensions
 # ------------------------------------------------------------------------------
