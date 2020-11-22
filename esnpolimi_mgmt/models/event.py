@@ -68,6 +68,13 @@ class Event(models.Model):
 
 
 class MainList(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["person", "event"], name="unique_%(class)s"
+            ),
+        ]
+
     person = models.ForeignKey("Person", models.CASCADE)
     event = models.ForeignKey("Event", models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
@@ -75,6 +82,13 @@ class MainList(models.Model):
 
 
 class WaitingList(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["person", "event"], name="unique_%(class)s"
+            ),
+        ]
+
     person = models.ForeignKey("Person", models.CASCADE)
     event = models.ForeignKey("Event", models.CASCADE)
     position = models.PositiveSmallIntegerField()
@@ -82,6 +96,13 @@ class WaitingList(models.Model):
 
 
 class Partecipant(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["person", "event"], name="unique_%(class)s"
+            ),
+        ]
+
     person = models.ForeignKey("Person", models.CASCADE)
     event = models.ForeignKey("Event", models.CASCADE)
     transaction = models.ForeignKey(

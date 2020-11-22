@@ -47,6 +47,12 @@ class Cash(models.Model):
 
 
 class Transaction(models.Model):
+    class Meta:
+        indexes = [
+            models.Index(fields=["timestamp"]),
+            models.Index(fields=["timestamp", "account"]),
+        ]
+
     timestamp = models.DateTimeField(default=timezone.now)
     account = models.ForeignKey(Account, models.PROTECT)
     amount = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS)
