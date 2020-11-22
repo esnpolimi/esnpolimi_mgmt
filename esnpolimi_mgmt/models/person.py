@@ -44,7 +44,7 @@ class Person(models.Model):
         return self.name
 
     def last_esncard(self):
-        return self.esncard_set.filter().latest()
+        return self.esncard_set.latest()
 
     def has_valid_card(self):
         return self.last_esncard().is_valid()
