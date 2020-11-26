@@ -115,7 +115,7 @@ class Partecipant(models.Model):
         "Transaction", models.SET_NULL, blank=True, null=True, related_name="+"
     )
 
-    student = models.ForeignKey("Student", models.CASCADE, blank=True, null=True)
+    matricola = models.ForeignKey("Matricola", models.CASCADE, blank=True, null=True)
     esncard = models.ForeignKey("ESNcard", models.CASCADE, blank=True, null=True)
 
     # other?

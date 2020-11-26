@@ -8,7 +8,7 @@ from django_countries.fields import CountryField
 from django_extensions.db.fields import RandomCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
-from esnpolimi_mgmt.managers import ESNcardQuerySet, PersonQuerySet, StudentQuerySet
+from esnpolimi_mgmt.managers import ESNcardQuerySet, MatricolaQuerySet, PersonQuerySet
 
 
 class Person(models.Model):
@@ -54,15 +54,16 @@ class Person(models.Model):
         return self.last_esncard().is_valid()
 
     def last_matricola(self):
-        return self.student_set.latest()
+        return self.matricola_set.latest()
 
 
-class Student(models.Model):
+class Matricola(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=["matricola"]),
         ]
         get_latest_by = "deprecated_on"
+        verbose_name_plural = "Matricole"
 
     matricola = models.PositiveIntegerField(primary_key=True)
     person = models.ForeignKey(Person, models.CASCADE)
@@ -76,7 +77,7 @@ class Student(models.Model):
 
     host_university = models.CharField(max_length=3, choices=Location.choices)
 
-    objects = StudentQuerySet.as_manager()
+    objects = MatricolaQuerySet.as_manager()
 
     def __str__(self):
         return str(self.matricola)

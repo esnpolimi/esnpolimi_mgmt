@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.translation import gettext_lazy as _
 
-from esnpolimi_mgmt.models import ESNcard, Person, Student
+from esnpolimi_mgmt.models import ESNcard, Matricola, Person
 
 admin.site.login = staff_member_required(
     view_func=admin.site.login, login_url="/", redirect_field_name=""
@@ -14,8 +14,8 @@ class ESNcardInline(admin.StackedInline):
     extra = 1
 
 
-class StudentInline(admin.StackedInline):
-    model = Student
+class MatricolaInline(admin.StackedInline):
+    model = Matricola
     extra = 0
 
 
@@ -44,7 +44,7 @@ class PersonAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs.with_valid_esncard().with_valid_matricola()
 
-    inlines = [ESNcardInline, StudentInline]
+    inlines = [ESNcardInline, MatricolaInline]
 
     list_display = [
         "name",
@@ -97,8 +97,8 @@ class ESNcardAdmin(admin.ModelAdmin):
         return obj.validity
 
 
-@admin.register(Student)
-class StudentAdmin(admin.ModelAdmin):
+@admin.register(Matricola)
+class MatricolaAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.with_points()

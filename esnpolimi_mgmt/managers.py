@@ -17,9 +17,11 @@ class PersonQuerySet(models.QuerySet):
         return self.annotate(valid_esncard=Subquery(subq.values("pk")))
 
     def with_valid_matricola(self):
-        from esnpolimi_mgmt.models import Student
+        from esnpolimi_mgmt.models import Matricola
 
-        subq = Student.objects.filter(person=OuterRef("pk"), deprecated_on__isnull=True)
+        subq = Matricola.objects.filter(
+            person=OuterRef("pk"), deprecated_on__isnull=True
+        )
         return self.annotate(valid_matricola=Subquery(subq.values("pk")))
 
 
@@ -37,6 +39,6 @@ class ESNcardQuerySet(models.QuerySet):
         return self.with_validity_at(today)
 
 
-class StudentQuerySet(models.QuerySet):
+class MatricolaQuerySet(models.QuerySet):
     def with_points(self):
         return self.annotate(points=Coalesce(Sum("partecipant__event__points"), V(0)))
