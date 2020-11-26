@@ -72,3 +72,50 @@ class PersonAdmin(admin.ModelAdmin):
         return True if obj.valid_esncard else False
 
     has_valid_card.boolean = True
+
+
+@admin.register(ESNcard)
+class ESNcardAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_validity()
+
+    list_display = [
+        "card_number",
+        "person",
+        "validity",
+        "start_validity",
+        "end_validity",
+    ]
+    ordering = ["start_validity"]
+    date_hierarchy = "start_validity"
+    readonly_fields = ["validity"]
+    search_fields = ["card_number"]
+    autocomplete_fields = ["person"]
+
+    def validity(self, obj):
+        return obj.validity
+
+
+@admin.register(Student)
+class StudentAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_points()
+
+    list_display = [
+        "matricola",
+        "person",
+        "points",
+        "degree",
+        "host_university",
+        "deprecated_on",
+    ]
+    ordering = ["deprecated_on"]
+    date_hierarchy = "deprecated_on"
+    readonly_fields = ["points"]
+    search_fields = ["matricola"]
+    autocomplete_fields = ["person"]
+
+    def points(self, obj):
+        return obj.points
