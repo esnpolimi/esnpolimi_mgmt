@@ -8,6 +8,8 @@ from django_countries.fields import CountryField
 from django_extensions.db.fields import RandomCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from esnpolimi_mgmt.managers import ESNcardQuerySet, PersonQuerySet, StudentQuerySet
+
 
 class Person(models.Model):
     class Meta:
@@ -39,6 +41,8 @@ class Person(models.Model):
 
     creation_time = models.DateTimeField(default=timezone.now)
     last_modified = models.DateTimeField(auto_now=True)
+
+    objects = PersonQuerySet.as_manager()
 
     def __str__(self):
         return self.name
@@ -72,6 +76,8 @@ class Student(models.Model):
 
     host_university = models.CharField(max_length=3, choices=Location.choices)
 
+    objects = StudentQuerySet.as_manager()
+
     def __str__(self):
         return str(self.matricola)
 
@@ -91,6 +97,8 @@ class ESNcard(models.Model):
     end_validity = models.DateField()
 
     section = models.CharField(max_length=64, default=settings.HOME_SECTION)
+
+    objects = ESNcardQuerySet.as_manager()
 
     def __str__(self):
         return str(self.card_number)
