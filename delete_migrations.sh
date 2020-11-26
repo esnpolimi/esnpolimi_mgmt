@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+mv esnpolimi_mgmt/migrations/0003_createsuperuser.py .
+
 find . -path "**/migrations/*.py" -not -path "**/contrib/sites/*" -not -name "__init__.py" -delete
 find . -path "**/migrations/__pycache__/*" -delete
 find . -path "**/migrations/*.pyc" -delete

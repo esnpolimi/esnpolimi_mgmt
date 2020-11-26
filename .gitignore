@@ -1,7 +1,8 @@
 certs/
 
-### temporary
-**/migrations/
+### migrations
+**/migrations/*
+!esnpolimi_mgmt/migrations/0003_createsuperuser.py
 
 ### Python template
 # Byte-compiled / optimized / DLL files

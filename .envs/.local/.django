@@ -5,3 +5,9 @@ IPYTHONDIR=/app/.ipython
 # All Auth
 # ------------------------------------------------------------------------------
 DJANGO_ACCOUNT_ALLOW_REGISTRATION=False
+# SUPERUSER
+# ------------------------------------------------------------------------------
+DJANGO_SUPERUSER_EMAIL=informatica@esnpolimi.it
+DJANGO_SUPERUSER_NAME=admin
+DJANGO_SUPERUSER_USERNAME=wginfo
+DJANGO_SUPERUSER_PASSWORD=provaora
