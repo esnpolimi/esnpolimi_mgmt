@@ -64,7 +64,7 @@ class Student(models.Model):
         ]
         get_latest_by = "deprecated_on"
 
-    matricola = models.PositiveIntegerField()
+    matricola = models.PositiveIntegerField(primary_key=True)
     person = models.ForeignKey(Person, models.CASCADE)
     deprecated_on = models.DateField(blank=True, null=True)
     degree = models.CharField(max_length=256)
@@ -91,7 +91,7 @@ class ESNcard(models.Model):
         verbose_name = "ESNcard"
         verbose_name_plural = "ESNcards"
 
-    card_number = models.CharField(max_length=16)
+    card_number = models.CharField(max_length=16, primary_key=True)
     person = models.ForeignKey(Person, models.CASCADE)
     start_validity = models.DateField()
     end_validity = models.DateField()

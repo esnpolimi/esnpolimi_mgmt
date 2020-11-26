@@ -14,13 +14,13 @@ class PersonQuerySet(models.QuerySet):
         subq = ESNcard.objects.with_validity().filter(
             person=OuterRef("pk"), validity=True
         )
-        return self.annotate(valid_esncard=Subquery(subq.values("id")))
+        return self.annotate(valid_esncard=Subquery(subq.values("pk")))
 
     def with_valid_matricola(self):
         from esnpolimi_mgmt.models import Student
 
         subq = Student.objects.filter(person=OuterRef("pk"), deprecated_on__isnull=True)
-        return self.annotate(valid_matricola=Subquery(subq.values("id")))
+        return self.annotate(valid_matricola=Subquery(subq.values("pk")))
 
 
 class ESNcardQuerySet(models.QuerySet):

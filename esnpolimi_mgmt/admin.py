@@ -63,12 +63,10 @@ class PersonAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "human_id", "valid_esncard")
 
     def valid_esncard(self, obj):
-        esncard = obj.valid_esncard
-        return esncard.card_number if esncard else None
+        return obj.valid_esncard
 
     def valid_matricola(self, obj):
-        mat = obj.valid_matricola
-        return mat.matricola if mat else None
+        return obj.valid_matricola
 
     def has_valid_card(self, obj):
         return True if obj.valid_esncard else False
