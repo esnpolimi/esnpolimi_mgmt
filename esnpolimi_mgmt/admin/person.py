@@ -15,8 +15,8 @@ class MatricolaInline(admin.StackedInline):
 
 
 class EsnValidFilter(admin.SimpleListFilter):
-    title = "Has Valid ESNcard"
-    parameter_name = "active"
+    title = "ESNcard Validity"
+    parameter_name = "valid"
 
     def lookups(self, request, model_admin):
         return (
