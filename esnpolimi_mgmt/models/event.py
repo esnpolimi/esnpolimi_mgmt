@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django_currentuser.db.models import CurrentUserField
 from django_fsm import FSMField, transition
 from djmoney.models.fields import MoneyField
 
@@ -15,7 +14,6 @@ User = get_user_model()
 class Event(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
-    created_by = CurrentUserField(on_delete=models.SET_NULL)
     referents = models.ManyToManyField(User, related_name="referent_of")
 
     partecipants = models.ManyToManyField(
@@ -41,8 +39,8 @@ class Event(models.Model):
     bando = models.BooleanField()
     externals = models.BooleanField(default=False)
 
-    fee = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, blank=True, default=0)
-    deposit = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, blank=True, default=0)
+    fee = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, default=0)
+    deposit = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, default=0)
 
     class Status(models.TextChoices):
         ready = "ready", _("Ready")
@@ -50,6 +48,9 @@ class Event(models.Model):
         cancelled = "cancelled", _("Cancelled")
 
     status = FSMField(choices=Status.choices, default=Status.ready)
+
+    def __str__(self):
+        return self.name
 
     def is_open_at(self, time):
         return self.open_registration_date <= time < self.close_registration_date
@@ -109,10 +110,20 @@ class Partecipant(models.Model):
         "Transaction", models.CASCADE, related_name="partecipant"
     )
     reimbursement = models.ForeignKey(
-        "Transaction", models.SET_NULL, blank=True, null=True, related_name="+"
+        "Transaction",
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="+",
+        default=None,
     )
     deposit_refund = models.ForeignKey(
-        "Transaction", models.SET_NULL, blank=True, null=True, related_name="+"
+        "Transaction",
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="+",
+        default=None,
     )
 
     matricola = models.ForeignKey("Matricola", models.CASCADE, blank=True, null=True)
@@ -130,4 +141,4 @@ class Partecipant(models.Model):
 
     status = FSMField(choices=Status.choices, default=Status.payed)
 
-    details_dump = models.JSONField(default=dict)
+    details_dump = models.JSONField(default=dict, blank=True)

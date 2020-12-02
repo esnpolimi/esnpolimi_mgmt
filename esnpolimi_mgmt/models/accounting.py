@@ -21,8 +21,14 @@ class Account(models.Model):
     )
     history = HistoricalRecords()
 
+    def __str__(self):
+        return self.name
+
 
 class Cash(models.Model):
+    class Meta:
+        verbose_name_plural = "Cash"
+
     account = models.ForeignKey(Account, models.CASCADE)
 
     class Note(models.TextChoices):
@@ -60,9 +66,9 @@ class Transaction(models.Model):
     client = models.ForeignKey("Person", models.CASCADE)
 
     class Type(models.TextChoices):
-        payement = "payement", _("Leonardo")
-        deposit_refund = "deposit_refund", _("Bovisa")
-        reimbursement = "reimbursement", _("Other location")
+        payement = "payement", _("Payement")
+        deposit_refund = "deposit_refund", _("Deposit Refund")
+        reimbursement = "reimbursement", _("Reimbusement")
         correction = "correction", _("Correction")
         withdrawal = "withdrawal", _("Withdrawal")
 
@@ -76,4 +82,4 @@ class Transaction(models.Model):
 
     office = models.CharField(max_length=3, choices=Office.choices)
 
-    details_dump = models.JSONField(default=dict)
+    details_dump = models.JSONField(default=dict, blank=True)
