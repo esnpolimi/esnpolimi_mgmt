@@ -17,7 +17,7 @@ class UserAdmin(FSMTransitionMixin, UserAdmin):
 
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("email", "person")}),
+        (_("User info"), {"fields": ("status", "email", "person")}),
         (
             _("Permissions"),
             {
@@ -44,6 +44,7 @@ class UserAdmin(FSMTransitionMixin, UserAdmin):
     list_select_related = ["person"]
     list_filter = ("status", "is_staff", "is_superuser", "is_active", "groups")
     ordering = ("status",)
+    readonly_fields = ["status"]
     search_fields = ("username", "person__name", "email")
     autocomplete_fields = ["person"]
 
