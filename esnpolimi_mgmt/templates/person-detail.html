@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Person: {{ person.name }}{% endblock %}
+
+{% block content %}
+
+<div class="row my-2">
+    <div class="col">
+
+      {% if person.user %}
+      <h2>{{ person.name }}</h2>
+      <h3>AKA {{ person.user.username }}</h3>
+      {% else %}
+      <h2>{{ person.name }}</h2>
+      {% endif %}
+    </div>
+</div>
+
+<div class="row my-2">
+  <div class="col-xl">
+    <h3>Personal Info</h3>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Name</b>: {{person.name}}</li>
+    <li class="list-group-item"><b>Email</b>: {{person.email}}</li>
+    <li class="list-group-item"><b>Human ID</b>: {{person.human_id}}</li>
+    <li class="list-group-item"><b>Gender</b>: {{person.gender}}</li>
+    <li class="list-group-item"><b>Birthdate</b>: {{person.birthdate}}</li>
+    <li class="list-group-item"><b>University</b>: {{person.university}}</li>
+    <li class="list-group-item"><b>Phone</b>: {{person.phone_number}}</li>
+    <li class="list-group-item"><b>Country</b>: {{person.country}}</li>
+    <li class="list-group-item"><b>Address</b>: {{person.address}}</li>
+    {% if person.idcard_type == "idcard" %}
+    <li class="list-group-item"><b>ID Card</b>: {{person.idcard_number}}</li>
+    {% elif person.idcard_type == "passport" %}
+    <li class="list-group-item"><b>Passport Number</b>: {{person.idcard_number}}</li>
+    {% endif %}
+    <li class="list-group-item"><b>Creation Time</b>: {{person.creation_time|date:"DATETIME_FORMAT"}}</li>
+    <li class="list-group-item"><b>Last Modified Time</b>: {{person.last_modified|date:"DATETIME_FORMAT"}}</li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <div class="container">
+
+  {% with esncard=person.last_esncard %}
+  {% if esncard %}
+    <div class="row">
+    <div class="col">
+    <h4>{{esncard.is_valid|yesno:"Valid ,"}}ESNcard</h4>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Card Number</b>: {{esncard.card_number}}</li>
+    <li class="list-group-item"><b>Section</b>: {{esncard.section}}</li>
+    <li class="list-group-item"><b>Start Valid Date</b>: {{esncard.start_validity_date|date}}</li>
+    <li class="list-group-item"><b>End Valid Date</b>: {{esncard.end_validity_date|date}}</li>
+    </ul>
+    </div>
+    </div>
+  {% endif %}
+  {% endwith %}
+
+  {% with matricola=person.last_matricola %}
+  {% if matricola %}
+    <div class="row">
+    <div class="col">
+    <h4>{{esncard.is_deprecated|yesno:"Nonvalid,Valid"}} Matricola</h4>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item"><b>Serial</b>: {{matricola.matricola}}</li>
+    <li class="list-group-item"><b>Host University</b>: {{matricola.host_university}}</li>
+    <li class="list-group-item"><b>Degree</b>: {{matricola.degree}}</li>
+    </ul>
+    </div>
+    </div>
+  {% endif %}
+  {% endwith %}
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
