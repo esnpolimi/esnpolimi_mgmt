@@ -1,10 +1,32 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 
-from esnpolimi_mgmt.models import Account, Cash, Transaction
+from esnpolimi_mgmt.models import Account, Cash, Office, PaymentMethod, Transaction
 
 
-@admin.register(Account)
-class AccountAdmin(admin.ModelAdmin):
+@admin.register(Office)
+class OfficeAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_balance()
+
+    list_display = [
+        "name",
+        "balance",
+    ]
+    readonly_fields = ["balance"]
+    search_fields = ["name"]
+
+    def balance(self, obj):
+        return obj.balance
+
+
+@admin.register(PaymentMethod)
+class PaymentMethodAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_balance()
+
     list_display = [
         "name",
         "type",
@@ -12,7 +34,22 @@ class AccountAdmin(admin.ModelAdmin):
     ]
     list_filter = ("type",)
     readonly_fields = ["balance"]
-    search_fields = ["name"]
+    search_fields = ["name", "type"]
+
+    def balance(self, obj):
+        return obj.balance
+
+
+@admin.register(Account)
+class AccountAdmin(SimpleHistoryAdmin):
+    list_display = [
+        "__str__",
+        "balance",
+    ]
+    list_filter = ("payment_method", "office")
+    readonly_fields = ["balance"]
+    search_fields = ["office", "payment_method"]
+    history_list_display = ["balance"]
 
 
 @admin.register(Cash)
@@ -31,6 +68,16 @@ class CashAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return (
+            qs.select_related("client")
+            .select_related("operator")
+            .select_related("account")
+            .select_related("account__office")
+            .select_related("account__payment_method")
+        )
+
     list_display = [
         "type",
         "amount",
@@ -39,7 +86,6 @@ class TransactionAdmin(admin.ModelAdmin):
         "operator",
         "client",
         "reason",
-        "office",
     ]
     ordering = ["timestamp"]
     date_hierarchy = "timestamp"
@@ -47,4 +93,10 @@ class TransactionAdmin(admin.ModelAdmin):
     autocomplete_fields = ["client", "operator"]
 
     list_select_related = ["account", "operator", "client"]
-    list_filter = ("type", "office", "account", "operator")
+    list_filter = (
+        "type",
+        "operator",
+        "account",
+        "account__office",
+        "account__payment_method",
+    )

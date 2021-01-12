@@ -42,3 +42,18 @@ class ESNcardQuerySet(models.QuerySet):
 class MatricolaQuerySet(models.QuerySet):
     def with_points(self):
         return self.annotate(points=Coalesce(Sum("partecipant__event__points"), V(0)))
+
+
+class PaymentMethodQuerySet(models.QuerySet):
+    def with_balance(self):
+        return self.annotate(balance=Coalesce(Sum("account__balance"), V(0)))
+
+
+class OfficeQuerySet(models.QuerySet):
+    def with_balance(self):
+        return self.annotate(balance=Coalesce(Sum("account__balance"), V(0)))
+
+
+class AccountManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("office", "payment_method")

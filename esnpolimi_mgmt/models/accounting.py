@@ -6,8 +6,14 @@ from django_currentuser.db.models import CurrentUserField
 from djmoney.models.fields import MoneyField
 from simple_history.models import HistoricalRecords
 
+from esnpolimi_mgmt.managers import (
+    AccountManager,
+    OfficeQuerySet,
+    PaymentMethodQuerySet,
+)
 
-class Account(models.Model):
+
+class PaymentMethod(models.Model):
     name = models.CharField(max_length=20)
 
     class PaymentsType(models.TextChoices):
@@ -15,14 +21,43 @@ class Account(models.Model):
         D = "D", _("Digital")
 
     type = models.CharField(max_length=1, choices=PaymentsType.choices)
+
+    objects = PaymentMethodQuerySet.as_manager()
+
+    def __str__(self):
+        return self.name
+
+
+class Office(models.Model):
+    name = models.CharField(max_length=32)
+    payment_methods = models.ManyToManyField(PaymentMethod, through="Account")
+
+    objects = OfficeQuerySet.as_manager()
+
+    def __str__(self):
+        return self.name
+
+
+class Account(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["payment_method", "office"], name="unique_%(class)s"
+            ),
+        ]
+
+    payment_method = models.ForeignKey("PaymentMethod", models.CASCADE)
+    office = models.ForeignKey("Office", models.CASCADE)
     balance = MoneyField(
         max_digits=settings.MAX_CURRENCY_DIGITS,
         default=0,
     )
     history = HistoricalRecords()
 
+    objects = AccountManager()
+
     def __str__(self):
-        return self.name
+        return f"{self.office} - {self.payment_method}"
 
 
 class Cash(models.Model):
@@ -60,7 +95,7 @@ class Transaction(models.Model):
         ]
 
     timestamp = models.DateTimeField(default=timezone.now)
-    account = models.ForeignKey(Account, models.PROTECT)
+    account = models.ForeignKey(Account, models.CASCADE)
     amount = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS)
     operator = CurrentUserField()
     client = models.ForeignKey("Person", models.CASCADE)
@@ -74,12 +109,5 @@ class Transaction(models.Model):
 
     type = models.CharField(max_length=30, choices=Type.choices)
     reason = models.CharField(max_length=256, blank=True)
-
-    class Office(models.TextChoices):
-        LEO = "LEO", _("Leonardo")
-        BOV = "BOV", _("Bovisa")
-        OTH = "OTH", _("Other location")
-
-    office = models.CharField(max_length=3, choices=Office.choices)
 
     details_dump = models.JSONField(default=dict, blank=True)
