@@ -2,6 +2,7 @@ import datetime
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
@@ -55,6 +56,9 @@ class Person(models.Model):
 
     def last_matricola(self):
         return self.matricola_set.latest()
+
+    def get_absolute_url(self):
+        return reverse("person-detail", kwargs={"human_id": self.human_id})
 
 
 class Matricola(models.Model):
