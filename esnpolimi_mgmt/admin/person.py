@@ -27,9 +27,9 @@ class EsnValidFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         value = self.value()
         if value == "Yes":
-            return queryset.filter(valid_esncard__isnull=False)
+            return queryset.filter(has_valid_card=True)
         elif value == "No":
-            return queryset.exclude(valid_esncard__isnull=False)
+            return queryset.exclude(has_valid_card=True)
         return queryset
 
 
@@ -37,7 +37,7 @@ class EsnValidFilter(admin.SimpleListFilter):
 class PersonAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.with_valid_esncard().with_valid_matricola()
+        return qs.with_last_esncard().with_last_matricola()
 
     inlines = [ESNcardInline, MatricolaInline]
 
@@ -47,24 +47,24 @@ class PersonAdmin(admin.ModelAdmin):
         "email",
         "country",
         "has_valid_card",
-        "valid_esncard",
-        "valid_matricola",
+        "last_esncard",
+        "last_matricola",
     ]
     list_filter = [EsnValidFilter]
     ordering = ["last_modified"]
 
-    readonly_fields = ["valid_esncard", "valid_matricola", "has_valid_card"]
+    readonly_fields = ["last_esncard", "last_matricola", "has_valid_card"]
 
-    search_fields = ("name", "email", "human_id", "valid_esncard")
+    search_fields = ("name", "email", "human_id", "last_esncard")
 
-    def valid_esncard(self, obj):
-        return obj.valid_esncard
+    def last_esncard(self, obj):
+        return obj.last_esncard
 
-    def valid_matricola(self, obj):
-        return obj.valid_matricola
+    def last_matricola(self, obj):
+        return obj.last_matricola
 
     def has_valid_card(self, obj):
-        return True if obj.valid_esncard else False
+        return obj.has_valid_card
 
     has_valid_card.boolean = True
 

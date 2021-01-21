@@ -24,6 +24,27 @@ class PersonQuerySet(models.QuerySet):
         )
         return self.annotate(valid_matricola=Subquery(subq.values("pk")))
 
+    def with_last_esncard(self):
+        from esnpolimi_mgmt.models import ESNcard
+
+        subq = (
+            ESNcard.objects.with_validity()
+            .filter(person=OuterRef("pk"))
+            .order_by("-start_validity")[:1]
+        )
+        return self.annotate(
+            last_esncard=Subquery(subq.values("pk")),
+            has_valid_card=Subquery(subq.values("validity")),
+        )
+
+    def with_last_matricola(self):
+        from esnpolimi_mgmt.models import Matricola
+
+        subq = Matricola.objects.filter(person=OuterRef("pk")).order_by(
+            "-deprecated_on"
+        )[:1]
+        return self.annotate(last_matricola=Subquery(subq.values("pk")))
+
 
 class ESNcardQuerySet(models.QuerySet):
     def with_validity_at(self, date):
