@@ -25,7 +25,6 @@ django-money
 django-countries
 django-simple-history
 django-phonenumber-field[phonenumbers]
-django-currentuser
 django-fsm
 
 # Admin

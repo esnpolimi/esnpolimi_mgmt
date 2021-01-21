@@ -1,8 +1,8 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django_currentuser.db.models import CurrentUserField
 from djmoney.models.fields import MoneyField
 from simple_history.models import HistoricalRecords
 
@@ -11,6 +11,8 @@ from esnpolimi_mgmt.managers import (
     OfficeQuerySet,
     PaymentMethodQuerySet,
 )
+
+User = get_user_model()
 
 
 class PaymentMethod(models.Model):
@@ -97,7 +99,7 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     account = models.ForeignKey(Account, models.CASCADE)
     amount = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS)
-    operator = CurrentUserField()
+    operator = models.ForeignKey(User, on_delete=models.CASCADE)
     client = models.ForeignKey("Person", models.CASCADE)
 
     class Type(models.TextChoices):
