@@ -69,7 +69,6 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
-    "crispy_forms",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -82,6 +81,9 @@ THIRD_PARTY_APPS = [
     "djmoney",
     "django_fsm",
     "fsm_admin",
+    "crispy_forms",
+    "django_tables2",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
@@ -311,3 +313,7 @@ MAX_CURRENCY_DIGITS = 12
 
 # Fix django extensioon
 SHELL_PLUS_DONT_LOAD = ["esnpolimi_mgmt.HistoricalAccount"]
+
+# TEMPLATE_PACKS
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
