@@ -1,1 +1,1 @@
-from .person import PersonDetailView  # noqa F401
+from .person import PersonDetailView, PersonListView  # noqa F401

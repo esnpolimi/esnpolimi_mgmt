@@ -1,7 +1,10 @@
+import django_filters
+import django_tables2 as tables
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 
 from esnpolimi_mgmt.models import Person
+from esnpolimi_mgmt.utils.helpers import ExportFilterTableView
 
 
 class PersonDetailView(LoginRequiredMixin, DetailView):
@@ -39,8 +42,8 @@ class PersonTable(tables.Table):
             "idcard_type",
             "phone_number",
             "last_modified",
-            "creation_time",
         ]
+        order_by = "last_modified"
 
     name = tables.Column("Name", linkify=True)
     last_esncard = tables.Column("Last ESNcard")
