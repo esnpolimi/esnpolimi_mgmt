@@ -2,7 +2,12 @@ from django.contrib.admin import site
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
 
-from .accounting import AccountAdmin, CashAdmin, TransactionAdmin  # noqa F401
+from .accounting import (  # noqa F401
+    AccountAdmin,
+    AccountMappingAdmin,
+    CashAdmin,
+    TransactionAdmin,
+)
 from .event import EventAdmin, MainListAdmin, WaitingListAdmin  # noqa F401
 from .permission import PermissionAdmin  # noqa F401
 from .person import ESNcardAdmin, MatricolaAdmin, PersonAdmin  # noqa F401

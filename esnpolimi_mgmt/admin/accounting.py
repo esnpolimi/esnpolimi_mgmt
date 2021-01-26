@@ -1,86 +1,74 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 
-from esnpolimi_mgmt.models import Account, Cash, Office, PaymentMethod, Transaction
+from esnpolimi_mgmt.models import (
+    Account,
+    AccountMapping,
+    Cash,
+    Office,
+    PaymentMethod,
+    Transaction,
+)
 
 
 @admin.register(Office)
 class OfficeAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.with_balance()
+    list_display = [
+        "name",
+    ]
+    search_fields = ["name"]
 
+
+@admin.register(PaymentMethod)
+class PaymentMethodAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "type",
+    ]
+    list_filter = ("type",)
+    search_fields = ["name", "type"]
+
+
+@admin.register(AccountMapping)
+class AccountMappingAdmin(admin.ModelAdmin):
+    list_display = [
+        "__str__",
+        "account",
+    ]
+    list_filter = ("payment_method", "office")
+    search_fields = ["office", "payment_method"]
+
+
+@admin.register(Account)
+class AccountAdmin(SimpleHistoryAdmin):
     list_display = [
         "name",
         "balance",
     ]
     readonly_fields = ["balance"]
     search_fields = ["name"]
-
-    def balance(self, obj):
-        return obj.balance
-
-
-@admin.register(PaymentMethod)
-class PaymentMethodAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.with_balance()
-
-    list_display = [
-        "name",
-        "type",
-        "balance",
-    ]
-    list_filter = ("type",)
-    readonly_fields = ["balance"]
-    search_fields = ["name", "type"]
-
-    def balance(self, obj):
-        return obj.balance
-
-
-@admin.register(Account)
-class AccountAdmin(SimpleHistoryAdmin):
-    list_display = [
-        "__str__",
-        "balance",
-    ]
-    list_filter = ("payment_method", "office")
-    readonly_fields = ["balance"]
-    search_fields = ["office", "payment_method"]
-    history_list_display = ["balance"]
+    history_list_display = ["name", "balance"]
 
 
 @admin.register(Cash)
 class CashAdmin(admin.ModelAdmin):
     list_display = [
-        "note_per_account",
+        "note_type",
+        "account",
         "quantity",
     ]
     list_select_related = ["account"]
     list_filter = ("note_type", "account")
     ordering = ["account", "note_type"]
 
-    def note_per_account(self, obj):
-        return f"{obj.get_note_type_display()} in {obj.account}"
-
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return (
-            qs.select_related("client")
-            .select_related("operator")
-            .select_related("account")
-            .select_related("account__office")
-            .select_related("account__payment_method")
-        )
-
     list_display = [
         "type",
         "amount",
+        "office",
+        "payment_method",
         "account",
         "timestamp",
         "operator",
@@ -92,11 +80,11 @@ class TransactionAdmin(admin.ModelAdmin):
     search_fields = ["reason", "operator", "client"]
     autocomplete_fields = ["client", "operator"]
 
-    list_select_related = ["account", "operator", "client"]
+    list_select_related = ["account", "operator", "client", "office", "payment_method"]
     list_filter = (
         "type",
         "operator",
         "account",
-        "account__office",
-        "account__payment_method",
+        "payment_method",
+        "office",
     )

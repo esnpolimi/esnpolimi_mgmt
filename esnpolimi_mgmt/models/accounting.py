@@ -6,12 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 from simple_history.models import HistoricalRecords
 
-from esnpolimi_mgmt.managers import (
-    AccountManager,
-    OfficeQuerySet,
-    PaymentMethodQuerySet,
-)
-
 User = get_user_model()
 
 
@@ -24,23 +18,19 @@ class PaymentMethod(models.Model):
 
     type = models.CharField(max_length=1, choices=PaymentsType.choices)
 
-    objects = PaymentMethodQuerySet.as_manager()
-
     def __str__(self):
         return self.name
 
 
 class Office(models.Model):
     name = models.CharField(max_length=32)
-    payment_methods = models.ManyToManyField(PaymentMethod, through="Account")
-
-    objects = OfficeQuerySet.as_manager()
+    payment_methods = models.ManyToManyField(PaymentMethod, through="AccountMapping")
 
     def __str__(self):
         return self.name
 
 
-class Account(models.Model):
+class AccountMapping(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -50,16 +40,22 @@ class Account(models.Model):
 
     payment_method = models.ForeignKey("PaymentMethod", models.CASCADE)
     office = models.ForeignKey("Office", models.CASCADE)
+    account = models.ForeignKey("Account", models.CASCADE, related_name="mappers")
+
+    def __str__(self):
+        return f"{self.payment_method} - {self.office}"
+
+
+class Account(models.Model):
+    name = models.CharField(max_length=32)
     balance = MoneyField(
         max_digits=settings.MAX_CURRENCY_DIGITS,
         default=0,
     )
     history = HistoricalRecords()
 
-    objects = AccountManager()
-
     def __str__(self):
-        return f"{self.office} - {self.payment_method}"
+        return self.name
 
 
 class Cash(models.Model):
@@ -97,17 +93,20 @@ class Transaction(models.Model):
         ]
 
     timestamp = models.DateTimeField(default=timezone.now)
+    office = models.ForeignKey(Office, models.CASCADE)
+    payment_method = models.ForeignKey(PaymentMethod, models.CASCADE)
     account = models.ForeignKey(Account, models.CASCADE)
     amount = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS)
     operator = models.ForeignKey(User, on_delete=models.CASCADE)
     client = models.ForeignKey("Person", models.CASCADE)
 
     class Type(models.TextChoices):
+        deposit = "deposit", _("Deposit")
+        withdrawal = "withdrawal", _("Withdrawal")
+        correction = "correction", _("Correction")
         payement = "payement", _("Payement")
         deposit_refund = "deposit_refund", _("Deposit Refund")
         reimbursement = "reimbursement", _("Reimbusement")
-        correction = "correction", _("Correction")
-        withdrawal = "withdrawal", _("Withdrawal")
 
     type = models.CharField(max_length=30, choices=Type.choices)
     reason = models.CharField(max_length=256, blank=True)
