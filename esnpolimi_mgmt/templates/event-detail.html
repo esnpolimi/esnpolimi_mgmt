@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Event: {{ event.name }}{% endblock %}
+
+{% block content %}
+
+<div class="row my-2">
+    <div class="col">
+      <h2>{{ event.name }}</h2>
+    </div>
+</div>
+
+<div class="row my-2">
+  <div class="col-xl">
+    <h3>Basic Info</h3>
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Status</b>: {{event.status}}</li>
+        <li class="list-group-item"><b>Description</b>:</br>
+<textarea readonly rows="15" style="width: 90%">
+{{event.description}}
+</textarea>
+        </li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <h3>Details</h3>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Open registration date</b>:
+            {{event.open_registration_date|date}}</li>
+        <li class="list-group-item"><b>Close registration date (no registration this
+            day)</b>: {{event.close_registration_date|date}}</li>
+        <li class="list-group-item"><b>Start date</b>: {{event.start_date|date}}</li>
+        <li class="list-group-item"><b>End date</b>: {{event.end_date|date}}</li>
+        <li class="list-group-item"><b>Capacity</b>: {{event.capacity}}</li>
+        <li class="list-group-item"><b>WL Capacity</b>: {{event.wl_capacity}}</li>
+        <li class="list-group-item"><b>Points</b>: {{event.points}}</li>
+        <li class="list-group-item"><b>Bando</b>: {{event.bando}}</li>
+        <li class="list-group-item"><b>Externals allowed</b>: {{event.externals}}</li>
+        <li class="list-group-item"><b>Fee</b>: {{event.fee}}</li>
+        <li class="list-group-item"><b>Deposit</b>: {{event.deposit}}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row my-2">
+    <div class="col">
+<textarea readonly rows="15" style="width: 100%">
+{{event.details_dump}}
+</textarea>
+    </div>
+</div>
+
+{% endblock content %}

@@ -4,6 +4,7 @@ from autoslug import AutoSlugField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_fsm import FSMField, transition
@@ -54,8 +55,8 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-    def is_open_at(self, time):
-        return self.open_registration_date <= time < self.close_registration_date
+    def is_open_at(self, date):
+        return self.open_registration_date <= date < self.close_registration_date
 
     @property
     def is_open(self):
@@ -68,6 +69,9 @@ class Event(models.Model):
     @transition(field=status, source=Status.ready, target=Status.cancelled)
     def cancel(self):
         pass
+
+    def get_absolute_url(self):
+        return reverse("event-detail", kwargs={"slug": self.slug})
 
 
 class MainList(models.Model):
