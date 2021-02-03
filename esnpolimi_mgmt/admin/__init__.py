@@ -8,7 +8,12 @@ from .accounting import (  # noqa F401
     CashAdmin,
     TransactionAdmin,
 )
-from .event import EventAdmin, MainListAdmin, WaitingListAdmin  # noqa F401
+from .event import (  # noqa F401
+    EventAdmin,
+    MainListAdmin,
+    OptionalAdmin,
+    WaitingListAdmin,
+)
 from .permission import PermissionAdmin  # noqa F401
 from .person import ESNcardAdmin, MatricolaAdmin, PersonAdmin  # noqa F401
 

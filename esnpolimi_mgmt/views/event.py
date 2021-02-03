@@ -32,6 +32,7 @@ class EventTable(tables.Table):
             "wl_capacity",
             "deposit",
             "deposit_currency",
+            "optionals",
         ]
         order_by = "open_registration_date"
 

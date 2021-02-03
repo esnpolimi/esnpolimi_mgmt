@@ -6,5 +6,5 @@ from .accounting import (  # noqa F401
     PaymentMethod,
     Transaction,
 )
-from .event import Event, MainList, Partecipant, WaitingList  # noqa F401
+from .event import Event, MainList, Optional, Partecipant, WaitingList  # noqa F401
 from .person import ESNcard, Matricola, Person  # noqa F401

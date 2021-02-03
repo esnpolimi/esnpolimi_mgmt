@@ -45,6 +45,8 @@ class Event(models.Model):
     fee = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, default=0)
     deposit = MoneyField(max_digits=settings.MAX_CURRENCY_DIGITS, default=0)
 
+    optional_info = models.ManyToManyField("Optional")
+
     class Status(models.TextChoices):
         ready = "ready", _("Ready")
         done = "done", _("Done")
@@ -102,6 +104,29 @@ class WaitingList(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
 
 
+class Optional(models.Model):
+    name = models.CharField(max_length=256)
+    label = models.CharField(max_length=256)
+    place_holder = models.CharField(max_length=256)
+    order = models.PositiveSmallIntegerField()
+
+    class Types(models.TextChoices):
+        int = "int", _("Integer")
+        float = "float", _("Float")
+        str = "str", _("String")
+        checkbox = "checkbox", _("Checkbox")
+        multi_checkbox = "multi_checkbox", _("Multi Checkbox")
+        select = "select", _("Select")
+        multi_select = "multi_select", _("Multi Select")
+        radio = "radio", _("Radio Button")
+
+    type = models.CharField(max_length=16, choices=Types.choices)
+    required = models.BooleanField()
+    default_value = models.CharField(max_length=256, blank=True)
+    choices = models.JSONField(default=list, blank=True)
+    meaning = models.JSONField(default=dict, blank=True)
+
+
 class Partecipant(models.Model):
     class Meta:
         constraints = [
@@ -134,8 +159,6 @@ class Partecipant(models.Model):
 
     matricola = models.ForeignKey("Matricola", models.CASCADE, blank=True, null=True)
     esncard = models.ForeignKey("ESNcard", models.CASCADE, blank=True, null=True)
-
-    # other?
 
     class Status(models.TextChoices):
         payed = "payed", _("Payed")

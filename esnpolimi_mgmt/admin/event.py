@@ -1,7 +1,7 @@
 from django.contrib import admin
 from fsm_admin.mixins import FSMTransitionMixin
 
-from esnpolimi_mgmt.models import Event, MainList, Partecipant, WaitingList
+from esnpolimi_mgmt.models import Event, MainList, Optional, Partecipant, WaitingList
 
 
 @admin.register(MainList)
@@ -58,6 +58,24 @@ class EventAdmin(FSMTransitionMixin, admin.ModelAdmin):
     filter_horizontal = ["referents"]
 
     fsm_field = ["status"]
+
+
+@admin.register(Optional)
+class OptionalAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "label",
+        "place_holder",
+        "order",
+        "type",
+        "required",
+        "default_value",
+        "choices",
+        "meaning",
+    ]
+    ordering = ["id", "order"]
+    search_fields = ["name"]
+    list_filter = ("type", "required")
 
 
 @admin.register(Partecipant)
