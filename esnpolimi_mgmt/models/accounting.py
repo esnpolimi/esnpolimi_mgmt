@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
@@ -112,3 +113,6 @@ class Transaction(models.Model):
     reason = models.CharField(max_length=256, blank=True)
 
     details_dump = models.JSONField(default=dict, blank=True)
+
+    def get_absolute_url(self):
+        return reverse("transaction-detail", kwargs={"id": self.id})

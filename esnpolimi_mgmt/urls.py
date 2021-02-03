@@ -5,6 +5,8 @@ from esnpolimi_mgmt.views import (
     EventListView,
     PersonDetailView,
     PersonListView,
+    TransactionDetailView,
+    TransactionListView,
 )
 
 urlpatterns = [
@@ -12,4 +14,10 @@ urlpatterns = [
     path("person", PersonListView.as_view(), name="person-list"),
     path("event/<str:slug>", EventDetailView.as_view(), name="event-detail"),
     path("event", EventListView.as_view(), name="event-list"),
+    path(
+        "transaction/<int:id>",
+        TransactionDetailView.as_view(),
+        name="transaction-detail",
+    ),
+    path("transaction", TransactionListView.as_view(), name="transaction-list"),
 ]

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Transaction: {{ transaction.name }}{% endblock %}
+
+{% block content %}
+
+<div class="row my-2">
+    <div class="col">
+      <h2>{{ transaction.name }}</h2>
+    </div>
+</div>
+
+<div class="row my-2">
+  <div class="col-xl">
+      <h3>Basic Info</h3>
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Account</b>: {{transaction.account}}</li>
+        <li class="list-group-item"><b>Amount</b>: {{transaction.amount}}</li>
+        <li class="list-group-item"><b>Timestamp</b>: {{transaction.timestamp|date}}</li>
+        <li class="list-group-item"><b>Office</b>: {{transaction.office}}</li>
+        <li class="list-group-item"><b>Payement method</b>: {{transaction.payment_method}}</li>
+        <li class="list-group-item"><b>Operator</b>: {{transaction.operator}}</li>
+        <li class="list-group-item"><b>Client</b>: {{transaction.client}}</li>
+        <li class="list-group-item"><b>Type</b>: {{transaction.type}}</li>
+        <li class="list-group-item"><b>Reason</b>: {{transaction.reason}}</li>
+    </ul>
+  </div>
+
+  <div class="col">
+    <h3>Details</h3>
+    <textarea readonly rows="15" style="width: 100%">
+{{transaction.details_dump}}
+    </textarea>
+  </div>
+</div>
+
+{% endblock content %}
