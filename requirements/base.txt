@@ -35,3 +35,4 @@ django-crispy-forms>=1.10.0  # https://github.com/django-crispy-forms/django-cri
 django-filter>=2.4.0  # https://github.com/carltongibson/django-filter
 django-tables2>=2.3.4  # https://github.com/jieter/django-tables2
 tablib>=3.0.0  # https://github.com/jazzband/tablib
+django-qurl-templatetag>=0.0.14 # https://github.com/sophilabs/django-qurl-templatetag
