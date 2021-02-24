@@ -80,6 +80,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     status = FSMField(choices=Status.choices, default=Status.aspirant)
 
+    default_office = models.ForeignKey(
+        "esnpolimi_mgmt.Office", on_delete=models.PROTECT
+    )
+
     @transition(field=status, source=Status.aspirant, target=Status.member)
     def activate(self):
         pass

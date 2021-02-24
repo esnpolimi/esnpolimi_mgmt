@@ -64,7 +64,7 @@ def reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("esnpolimi_mgmt", "0003_createsuperuser"),
+        ("esnpolimi_mgmt", "0002_initial2"),
     ]
 
     operations = [

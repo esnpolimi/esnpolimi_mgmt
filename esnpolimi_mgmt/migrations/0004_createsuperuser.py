@@ -19,6 +19,7 @@ def createsuperuser(apps, schema_editor):
     Person = apps.get_model("esnpolimi_mgmt", "Person")
     ESNcard = apps.get_model("esnpolimi_mgmt", "ESNcard")
     Matricola = apps.get_model("esnpolimi_mgmt", "Matricola")
+    Office = apps.get_model("esnpolimi_mgmt", "Office")
 
     p = Person.objects.create(name=name, email=email)
 
@@ -30,6 +31,7 @@ def createsuperuser(apps, schema_editor):
         is_staff=True,
         is_superuser=True,
         person=p,
+        default_office=Office.objects.get(name="Leonardo"),
     )
 
     EmailAddress.objects.create(user=u, email=email, primary=True, verified=True)
@@ -54,7 +56,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("esnpolimi_mgmt", "0002_initial2"),
+        ("esnpolimi_mgmt", "0003_createaccounts"),
     ]
 
     operations = [
