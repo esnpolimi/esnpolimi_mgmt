@@ -1,28 +1,64 @@
 {% load i18n %}
+{% load qurl %}
 
 <div class="mb-1">
     <nav class="navbar navbar-expand-md navbar-light bg-light">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="{% url 'home' %}">ESNPolimi-mgmt</a>
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img id="logo" src="" alt=""> ESNPolimi
+    </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {# Left aligned #}
         <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
-        </li>
-        {% if request.user.is_authenticated %}
             <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
+                <a class="nav-link" href="{% url 'about' %}">About</a>
             </li>
-            <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Persons
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% url 'person-list' as person_url %}
+                    <a class="dropdown-item" href="{{ person_url }}">Person List</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% qurl 'person-list' has_valid_card=True %}">Members</a>
+                    <a class="dropdown-item" href="{% qurl 'person-list' has_valid_card=False sort='-creation_time' %}">Pending List</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Create ESNcard</a>
+                    <a class="dropdown-item" href="#">Renew ESNcard</a>
+                    <a class="dropdown-item" href="#">Emit ESNcard</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Events
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% url 'event-list' as event_url %}
+                    <a class="dropdown-item" href="{{ event_url }}">Event List</a>
+                    <a class="dropdown-item" href="{% qurl event_url status='ready' %}">Open Events</a>
+                    <a class="dropdown-item" href="{% qurl event_url status='done' %}">Closed Events</a>
+                    {# Open here after divider? Needs cache #}
+                    {% comment %}
+                    <div class="dropdown-divider"></div>
+                    {% for open_event in open_events %}
+                    <a class="dropdown-item" href="{% url 'event-detail' slug=open_event.slug %}">{{open_event}}</a>
+                    {% endfor %}
+                    {% endcomment %}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Transactions
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% url 'transaction-list' as transaction_url %}
+                    <a class="dropdown-item" href="{{ transaction_url }}">Transaction List</a>
+                    <a class="dropdown-item" href="{% qurl transaction_url office=last_office %}">Local Office Account</a>
+                </div>
             </li>
             {% if request.user.is_staff %}
             <li class="nav-item">
@@ -30,17 +66,46 @@
                 <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Admin Panel" %}</a>
             </li>
             {% endif %}
-        {% else %}
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0 mx-auto" action="{% url "person-list" %}" method="get">
+        <input class="form-control mr-sm-2" type="search" placeholder="Person by Name" aria-label="Search" id="id_name__icontains" name="name__icontains">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+        {# Right aligned #}
+        <ul class="navbar-nav ml-auto">
+        {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Office
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <p class="dropdown-item">Last used: {{last_office}}</p>
+                    <div class="dropdown-divider"></div>
+                    {% comment %}
+                    {% for office in offices %}
+                    <a class="dropdown-item" href="">{{office}}</a>
+                    {% endfor %}
+                    {% endcomment %}
+                </div>
+            </li>
             <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
-            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+            <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "Profile" %}</a>
             </li>
+            <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+            </li>
+        {% else %}
             <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
             <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
             </li>
         {% endif %}
         </ul>
+
     </div>
     </nav>
 

@@ -84,6 +84,7 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "django_tables2",
     "django_filters",
+    "qurl_templatetag",
 ]
 
 LOCAL_APPS = [
