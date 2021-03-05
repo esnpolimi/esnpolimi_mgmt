@@ -1,8 +1,11 @@
 import django_filters
 import django_tables2 as tables
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView
 
+from esnpolimi_mgmt.forms import ErasmusForm
 from esnpolimi_mgmt.models import Person
 from esnpolimi_mgmt.utils.helpers import ExportFilterTableView
 
@@ -61,3 +64,11 @@ class PersonListView(LoginRequiredMixin, ExportFilterTableView):
 
     def get_queryset(self):
         return super().get_queryset().with_last_esncard()
+
+
+class ErasmusCreateView(SuccessMessageMixin, CreateView):
+    model = Person
+    template_name = "external/simple_form.html"
+    form_class = ErasmusForm
+    success_url = reverse_lazy("logo-page")
+    success_message = "Hi %(name)s! Welcome to the ESN family"
