@@ -12,7 +12,7 @@ class PersonDetailView(LoginRequiredMixin, DetailView):
     slug_field = "human_id"
     slug_url_kwarg = "human_id"
     context_object_name = "person"
-    template_name = "person-detail.html"
+    template_name = "internal/person_detail.html"
 
 
 class PersonFilter(django_filters.FilterSet):
@@ -54,7 +54,7 @@ class PersonListView(LoginRequiredMixin, ExportFilterTableView):
     model = Person
     table_class = PersonTable
     filterset_class = PersonFilter
-    template_name = "table_filtered.html"
+    template_name = "internal/table_filtered.html"
 
     export_name = "person_list"
     export_perm = "export_person_list"

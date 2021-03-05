@@ -12,7 +12,7 @@ class TransactionDetailView(LoginRequiredMixin, DetailView):
     slug_field = "id"
     slug_url_kwarg = "id"
     context_object_name = "transaction"
-    template_name = "transaction-detail.html"
+    template_name = "internal/transaction_detail.html"
 
 
 class TransactionFilter(django_filters.FilterSet):
@@ -45,7 +45,7 @@ class TransactionListView(LoginRequiredMixin, ExportFilterTableView):
     model = Transaction
     table_class = TransactionTable
     filterset_class = TransactionFilter
-    template_name = "table_filtered.html"
+    template_name = "internal/table_filtered.html"
 
     export_name = "transaction_list"
     export_perm = "export_transaction_list"

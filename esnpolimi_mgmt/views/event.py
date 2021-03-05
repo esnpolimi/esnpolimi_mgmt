@@ -12,7 +12,7 @@ class EventDetailView(LoginRequiredMixin, DetailView):
     slug_field = "slug"
     slug_url_kwarg = "slug"
     context_object_name = "event"
-    template_name = "event-detail.html"
+    template_name = "internal/event_detail.html"
 
 
 class EventFilter(django_filters.FilterSet):
@@ -43,7 +43,7 @@ class EventListView(LoginRequiredMixin, ExportFilterTableView):
     model = Event
     table_class = EventTable
     filterset_class = EventFilter
-    template_name = "table_filtered.html"
+    template_name = "internal/table_filtered.html"
 
     export_name = "event_list"
     export_perm = "export_event_list"
