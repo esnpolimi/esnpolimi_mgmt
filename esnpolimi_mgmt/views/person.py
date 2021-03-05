@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
-from esnpolimi_mgmt.forms import ErasmusForm
+from esnpolimi_mgmt.forms import AspirantForm, ErasmusForm
 from esnpolimi_mgmt.models import Person
 from esnpolimi_mgmt.utils.helpers import ExportFilterTableView
 
@@ -70,5 +70,13 @@ class ErasmusCreateView(SuccessMessageMixin, CreateView):
     model = Person
     template_name = "external/simple_form.html"
     form_class = ErasmusForm
+    success_url = reverse_lazy("logo-page")
+    success_message = "Hi %(name)s! Welcome to the ESN family"
+
+
+class AspirantCreateView(SuccessMessageMixin, CreateView):
+    model = Person
+    template_name = "external/simple_form.html"
+    form_class = AspirantForm
     success_url = reverse_lazy("logo-page")
     success_message = "Hi %(name)s! Welcome to the ESN family"

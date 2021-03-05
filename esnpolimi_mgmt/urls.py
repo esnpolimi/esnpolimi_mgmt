@@ -2,6 +2,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from esnpolimi_mgmt.views import (
+    AspirantCreateView,
     ErasmusCreateView,
     EventDetailView,
     EventListView,
@@ -19,6 +20,7 @@ urlpatterns = [
     ),
     path("person/<str:human_id>", PersonDetailView.as_view(), name="person-detail"),
     path("person", PersonListView.as_view(), name="person-list"),
+    path("new-aspirant", AspirantCreateView.as_view(), name="new-aspirant"),
     path("new-erasmus", ErasmusCreateView.as_view(), name="new-erasmus"),
     path("event/<str:slug>", EventDetailView.as_view(), name="event-detail"),
     path("event", EventListView.as_view(), name="event-list"),

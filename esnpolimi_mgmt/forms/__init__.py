@@ -1,1 +1,1 @@
-from .person import ErasmusForm  # noqa F401
+from .person import AspirantForm, ErasmusForm  # noqa F401
