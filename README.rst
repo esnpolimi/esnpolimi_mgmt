@@ -13,62 +13,53 @@ ESN Politecnico Milano Management Site
 
 :License: BSD
 
+Setup
+-----
 
-Settings
---------
+1. Create and activate a python virtual environment
 
-Moved to settings_.
+2. Install development dependencies::
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
+      pip install -r requirements/local.txt
 
-Basic Commands
---------------
+3. Install precommit::
 
-Setting Up Your Users
-^^^^^^^^^^^^^^^^^^^^^
+      pre-commit install
+      pre-commit install --hook-type commit-msg
 
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+4. Set local environment variables::
 
-* To create an **superuser account**, use this command::
+      source .envs/.local/.postgres
+      export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+      export USE_DOCKER="yes"
 
-    $ python manage.py createsuperuser
+5. Install `mkcert` (details_ per platform) and run::
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
+      mkcert -install
+      mkcert local "*.local" localhost 127.0.0.1 ::1
 
-Type checks
-^^^^^^^^^^^
+   Move the new `.pem` files in current directory to a `./certs/` folder in the project.
 
-Running type checks with mypy:
+6. Finally build docker images::
 
-::
+      docker-compose -f local.yml build
 
-  $ mypy esnpolimi_mgmt
+Check this page_ for details.
 
-Test coverage
-^^^^^^^^^^^^^
+.. _page: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
+.. _details: https://github.com/FiloSottile/mkcert
 
-To run the tests, check your test coverage, and generate an HTML coverage report::
+Run application
+---------------
 
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
+In order to run the whole stack use::
 
-Running tests with py.test
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+   docker-compose -f local.yml up -d
 
-::
+The first time it will take a while, wait until :code:`docker-compose -f local.yml logs django` says otherwise.
+You could need to make the database migrations if the last ones have not been committed yet, in such cases run::
 
-  $ pytest
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-
-
+    ./delete_migrations.sh
 
 Email Server
 ^^^^^^^^^^^^
@@ -78,27 +69,12 @@ In development, it is often nice to be able to see emails that are being sent fr
 Container mailhog will start automatically when you will run all docker containers.
 Please check `cookiecutter-django Docker documentation`_ for more details how to start all containers.
 
-With MailHog running, to view messages that are sent by your application, open your browser and go to ``http://127.0.0.1:8025``
+With MailHog running, to view messages that are sent by your application, open your browser and go to ``http://localhost:8025``
 
 .. _mailhog: https://github.com/mailhog/MailHog
 
-
-
-Sentry
-^^^^^^
-
-Sentry is an error logging aggregator service. You can sign up for a free account at  https://sentry.io/signup/?code=cookiecutter  or download and host it yourself.
-The system is setup with reasonable defaults, including 404 logging and integration with the WSGI application.
-
-You must set the DSN url in production.
-
-
 Deployment
 ----------
-
-The following details how to deploy this application.
-
-
 
 Docker
 ^^^^^^
