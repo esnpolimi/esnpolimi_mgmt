@@ -44,6 +44,12 @@ Setup
 
       docker-compose -f local.yml build
 
+7. (Optional) Add domain name to the host file (usually /etc/hosts) for ease of access::
+
+      127.0.0.1        mgmt.esnpolimi.local    localhost
+
+   as last line if the file.
+
 Check this page_ for details.
 
 .. _page: https://cookiecutter-django.readthedocs.io/en/latest/developing-locally-docker.html
@@ -59,7 +65,11 @@ In order to run the whole stack use::
 The first time it will take a while, wait until :code:`docker-compose -f local.yml logs django` says otherwise.
 You could need to make the database migrations if the last ones have not been committed yet, in such cases run::
 
-    ./delete_migrations.sh
+   ./delete_migrations.sh
+
+or, if you didn't follow the optional step 7::
+
+    docker-compose -f local.yml exec django bash -c 'delete_migrations.sh'
 
 Email Server
 ^^^^^^^^^^^^
