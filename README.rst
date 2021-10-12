@@ -30,15 +30,18 @@ Setup
 4. Set local environment variables::
 
       source .envs/.local/.postgres
+      source .envs/.local/.django
+      source .envs/.local/.django_vhost
       export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
-      export USE_DOCKER="yes"
 
 5. Install `mkcert` (details_ per platform) and run::
 
       mkcert -install
-      mkcert local "*.local" localhost 127.0.0.1 ::1
+      mkcert -cert-file certs/$VIRTUAL_HOST.crt -key-file certs/$VIRTUAL_HOST.key "mgmt.esnpolimi.local" "esnpolimi.local" "*.esnpolimi.local" "*.local" localhost 127.0.0.1 ::1
 
-   Move the new `.pem` files in current directory to a `./certs/` folder in the project.
+6. Install docker and add your user to the `docker` group in order to avoid the use of sudo::
+
+      sudo usermod -aG docker $USER
 
 6. Finally build docker images::
 
@@ -48,7 +51,7 @@ Setup
 
       127.0.0.1        mgmt.esnpolimi.local    localhost
 
-   as last line if the file.
+   as last line of the file.
 
 Check this page_ for details.
 
