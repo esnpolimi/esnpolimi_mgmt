@@ -47,9 +47,10 @@ Setup
 
       docker-compose -f local.yml build
 
-7. (Optional) Add domain name to the host file (usually /etc/hosts) for ease of access::
+7. Add domains name to the host file (usually /etc/hosts) for ease of access::
 
-      127.0.0.1        mgmt.esnpolimi.local    localhost
+      127.0.0.1        mgmt.esnpolimi.local
+      127.0.0.1        postgres
 
    as last line of the file.
 
@@ -69,10 +70,6 @@ The first time it will take a while, wait until :code:`docker-compose -f local.y
 You could need to make the database migrations if the last ones have not been committed yet, in such cases run::
 
    ./delete_migrations.sh
-
-or, if you didn't follow the optional step 7::
-
-    docker-compose -f local.yml exec django bash -c 'delete_migrations.sh'
 
 Email Server
 ^^^^^^^^^^^^
