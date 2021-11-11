@@ -33,6 +33,7 @@ Setup
       source .envs/.local/.django
       source .envs/.local/.django_vhost
       export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+      export USE_DOCKER="yes"
 
 5. Install `mkcert` (details_ per platform) and run::
 
