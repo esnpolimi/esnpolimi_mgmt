@@ -3,8 +3,15 @@ Base settings to build other settings files upon.
 """
 from pathlib import Path
 
+import django
 import environ
+from django.utils.encoding import force_str
+from django.utils.translation import gettext
 from moneyed import EUR
+
+django.utils.translation.ugettext = gettext
+django.utils.encoding.force_text = force_str
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # esnpolimi_mgmt/
@@ -36,7 +43,7 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
-USE_L10N = True
+# USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
@@ -82,6 +89,7 @@ THIRD_PARTY_APPS = [
     "django_fsm",
     "fsm_admin",
     "crispy_forms",
+    "crispy_bootstrap4",
     "django_tables2",
     "django_filters",
     "qurl_templatetag",
@@ -149,6 +157,7 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 # STATIC
@@ -208,9 +217,6 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
-# http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = "bootstrap4"
-
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
@@ -269,7 +275,6 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
-
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
@@ -319,3 +324,5 @@ SHELL_PLUS_DONT_LOAD = ["esnpolimi_mgmt.HistoricalAccount"]
 # TEMPLATE_PACKS
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
