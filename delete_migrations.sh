@@ -6,8 +6,9 @@ mv esnpolimi_mgmt/migrations/0003_createaccounts.py .
 find . -path "**/migrations/*.py" -not -path "**/contrib/sites/*" -not -name "__init__.py" -delete
 find . -path "**/migrations/__pycache__/*" -delete
 find . -path "**/migrations/*.pyc" -delete
-
 find . -path "**/__pycache__/*" -delete
+
+pip3 uninstall django -y && pip3 install django
 
 python manage.py makemigrations
 
