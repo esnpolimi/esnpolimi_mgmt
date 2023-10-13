@@ -8,7 +8,7 @@ repos:
   - id: end-of-file-fixer
   - id: check-yaml
   repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v4.5.0
 - hooks:
   - id: black
   repo: https://github.com/psf/black
@@ -30,4 +30,4 @@ repos:
     stages:
     - commit-msg
   repo: https://github.com/commitizen-tools/commitizen
-  rev: 3.9.0
+  rev: 3.10.0
